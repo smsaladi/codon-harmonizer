@@ -96,7 +96,7 @@ def main(argv):
 
 
     frequentie_file = open(inputs.output,"w")
-    frequentie_file.write("NAME="+inputs.name)
+    frequentie_file.write("NAME,"+inputs.name)
 
     codon_frequencies = {}
     for entry in fasta:

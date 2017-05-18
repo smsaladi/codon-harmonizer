@@ -71,9 +71,16 @@ def get_fasta_sequences(fasta_contents):
 		print("Not a valid DNA fasta file, maybe contains non DNA letters")
 		sys.exit()
 
+def translate(sequence,header):
+	""" Return the translated protein from a sequence reading frame +1 """
+	codon_sequence = split_to_codons(sequence,header)
+	translated_seq = ""
+	for codon in codon_sequence:
+		translated_seq += gencode_1[codon]
+	return translated_seq
 
 def get_codon_freq(freq_file_path):
-	""" return frequencies of all the codons from the given organism """
+	""" returns relative frequencies and counts of all the codons from the given organism in a dictionairy"""
 	try:
 		freq_file = open(freq_file_path).readlines()
 	except (OSError, IOError) as err:
@@ -84,8 +91,9 @@ def get_codon_freq(freq_file_path):
 	counts = {}
 	name="no_name"
 	for linenr, line in enumerate(freq_file):
-		#FIRST GET NAME
-		if linenr==0: name = line.strip().split("=")[1]
+		#FIRST GET NAME IF THERE (on 1st line: NAME,example_name)
+		if linenr==0 and len(line.strip().split(","))==2:
+			name = line.strip().split(",")[1]
 		else:
 			freq_line = line.strip().split(",")
 
@@ -108,16 +116,8 @@ def get_codon_freq(freq_file_path):
 			frequencies[AA][1].append(CodonFreq)
 	return [name, frequencies, counts]
 
-def translate(sequence,header):
-	""" Return the translated protein from a sequence reading frame +1 """
-	codon_sequence = split_to_codons(sequence,header)
-	translated_seq = ""
-	for codon in codon_sequence:
-		translated_seq += gencode_1[codon]
-	return translated_seq
-
 def split_to_codons(sequence,header):
-	"""Returns a codon list from a sequence reading frame +1 """
+	"""returns a codon list from a sequence reading frame +1 """
 	if len(sequence) % 3 == 0:
 		codon_sequence_list = [sequence[i:i+3] for i in range(0,len(sequence),3)]
 		return codon_sequence_list
@@ -127,7 +127,7 @@ def split_to_codons(sequence,header):
 
 
 def get_input_sequence_freq(fasta_contents,freqs):
-	""" return frequencies of the input gene sequence only """
+	""" returns relative frequencies of the input gene sequence only """
 	input_sequences = get_fasta_sequences(fasta_contents)
 	seq_freqs = {}
 	for header in input_sequences:
