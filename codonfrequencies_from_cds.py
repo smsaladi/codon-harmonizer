@@ -22,13 +22,8 @@ gencode_11 = {
 "GTG":"V","GCG":"A","GAG":"E","GGG":"G"}
 
 
-# TODO:
-# - input gbk
-# - input gff and genome fasta
-
-
 def parse_options():
-    parser = argparse.ArgumentParser(description='A foo that bars')
+    parser = argparse.ArgumentParser(description='Generate a frequency file from a CDS fasta file used for the codonharmonizer')
 
     parser.add_argument(dest="fasta_filepath", help="DNA multi-fasta file of protein coding genes", metavar="CDS-FASTA")
     parser.add_argument("-n, --name", dest="name", required=True, help="Name of the organism", metavar="NAME")
@@ -39,7 +34,7 @@ def parse_options():
 
     return inputs
 
-"""Given a fasta file, return a dictionary of the entrtooies"""
+"""Given a fasta file, return a dictionary of the entries"""
 def get_sequences(fasta_contents):
     try:
         sequence_dic = {}

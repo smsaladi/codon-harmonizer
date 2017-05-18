@@ -27,8 +27,8 @@ gencode_1 = {
 AAs = ["A","C","D","E","F","G","H","I","K","L","M","N","P","Q","R","S","T","V","W","Y","-"]
 
 def parse_options():
-	usage = "\ncodonharm.py -f <(multi)fasta_file> -o <output file> -s <source_organism> -t <frequency_file>,<frequency_file> etc.."
-	parser = argparse.ArgumentParser(usage=usage, description='A foo that bars')
+	usage = "\ncodonharm.py -f <(multi)fasta_file> -o <output file> -s <frequency_file> -t <frequency_file>,<frequency_file> etc.."
+	parser = argparse.ArgumentParser(usage=usage, description='Harmonize your genes for a target organism. See codonfrequencies_from_cds.py to generate frequency files.')
 
 	input_group = parser.add_argument_group('Input')
 	input_group.add_argument("-f","--fasta",  dest="fasta_filepath", help="DNA (multi)fasta file", required=True, metavar="FASTA")
