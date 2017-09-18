@@ -5,6 +5,7 @@ import argparse
 import os
 import string, random
 import zipfile
+import math
 
 gencode_1 = {
 "TTT":"F","TCT":"S","TAT":"Y","TGT":"C",
@@ -68,7 +69,7 @@ def get_fasta_sequences(fasta_contents):
 		return sequence_list
 
 	except ValueError as err:
-		print("Not a valid DNA fasta file, maybe contains non DNA letters")
+		sys.stderr.write("Not a valid DNA fasta file, maybe contains non DNA letters")
 		sys.exit()
 
 def translate(sequence,header):
@@ -122,7 +123,7 @@ def split_to_codons(sequence,header):
 		codon_sequence_list = [sequence[i:i+3] for i in range(0,len(sequence),3)]
 		return codon_sequence_list
 	else:
-		print("Partial sequence >"+header+" not divisible by complete codons")
+		sys.stderr.write("Partial sequence >"+header+" not divisible by complete codons")
 		sys.exit()
 
 
@@ -162,21 +163,21 @@ def harmonize_sequences(source_gene_freqs,target_freqs):
 
 def get_index_score(freqs,native_freq):
 	''' calculate index score or CHI, Codon Harmonization Index '''
-	seq_len = len(native_freq)
+	nr_codons = len(native_freq)
 	diffsum=0
 
-	for AApos in range(seq_len):
+	for AApos in range(nr_codons):
 		diffsum+=abs(freqs[AApos][2]-native_freq[AApos][2])
 
-	score = 1/seq_len*diffsum
+	score = 1/nr_codons*diffsum
 	return score
 
 def CAI(gene_freqs):
 	'''calculate average frequencies '''
-	gene_length = len(gene_freqs)
-	total = 0
-	for f in gene_freqs: total+=f[2]
-	cai = total/gene_length
+	nr_codons = len(gene_freqs)
+	product = 1
+	for f in gene_freqs: product*=f[2]
+	cai = math.pow(product,(1/nr_codons))
 	return cai
 
 
@@ -238,7 +239,7 @@ def main(argv):
 
 			harm_out_file.write("Harmonized gene:,"+harmonized_sequence+"\n\n")
 
-			harm_out_file.write(",,,,,CHI:,"+str(non_CHI)+",,CHI:,"+str(CHI)+"\n")
+			harm_out_file.write(",,CHI:,0,,CHI:,"+str(non_CHI)+",,CHI:,"+str(CHI)+"\n")
 			harm_out_file.write(",,CAI:,"+str(CAI_native)+",,CAI:,"+str(CAI_nonNative)+",,CAI:,"+str(CAI_harmonized)+"\n\n")
 
 			harm_out_file.write(","+source_name+" Source gene in "+source_name+",,,"+source_name+" Source gene in "+target+",,,"+source_name+" harmonized gene in "+target+"\n")
