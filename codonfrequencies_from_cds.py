@@ -1,4 +1,4 @@
-#!/usr/bin/python3.5
+#!/usr/bin/python3
 
 import sys
 import argparse
@@ -34,8 +34,8 @@ def parse_options():
 
     return inputs
 
-"""Given a fasta file, return a dictionary of the entries"""
 def get_sequences(fasta_contents):
+    """Given a fasta file, return a dictionary of the entries"""
     try:
         sequence_dic = {}
         header = ""
@@ -57,15 +57,14 @@ def get_sequences(fasta_contents):
         sys.stderr.write("Not a valid DNA fasta file (missing header)")
         sys.exit()
 
-"""Returns a codon list from a sequence reading frame +1 """
 def split_to_codons(sequence, header, quiet):
+    """Returns a codon list from a sequence reading frame +1 """
     valid_bases = "ATCG"
     codon_sequence_list = []
     if len(sequence) % 3 == 0:
         codon_sequence_list = [sequence[i:i+3] for i in range(0,len(sequence),3)]
-    else:
-        if not quit: 
-            print("Partial sequence >"+header+" not divisible by complete codons")
+    elif not quiet:
+            print("NOT USED: Partial sequence >"+header+" not divisible by complete codons")
 
     codon_sequence_list_clean = []
     for codon in codon_sequence_list:
@@ -86,8 +85,8 @@ def main(argv):
         sys.exit()
 
     fasta = get_sequences(fastafile)
-    if len(fasta) < 200:
-        print("WARNING: Number of genes < 200")
+    if len(fasta) < 100:
+        print("WARNING: Number of genes < 100")
 
 
     frequentie_file = open(inputs.output,"w")
