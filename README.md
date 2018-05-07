@@ -1,3 +1,9 @@
+<b>To use the tool online go to:<b><br />
+http://codonharmonizer.systemsbiology.nl
+
+<b>Please cite this tool as:</b><br />
+Claassens NJ, Siliakus MF, Nijsse B, Spaans SK, Creutzburg SCA, Schaap PJ, et al. Improving heterologous membrane protein production in Escherichia coli by combining transcriptional tuning and codon usage algorithms. PLoS One. 2017
+
 Requirements: Python 3
 
 ```
