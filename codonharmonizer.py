@@ -1,4 +1,4 @@
-#!/usr/bin/python3.5
+#!/usr/bin/python3
 
 import sys,getopt
 import argparse
@@ -28,17 +28,20 @@ gencode_1 = {
 AAs = ["A","C","D","E","F","G","H","I","K","L","M","N","P","Q","R","S","T","V","W","Y","-"]
 
 def parse_options():
-	usage = "\ncodonharm.py -f <(multi)fasta_file> -o <output file> -s <frequency_file> -t <frequency_file>,<frequency_file> etc.."
+	usage = "\ncodonharm.py -f <(multi)fasta_file> -o <output file> -s <source frequency_file> -t <target frequency_file>,<target frequency_file> etc.."
 	parser = argparse.ArgumentParser(usage=usage, description='Harmonize your genes for a target organism. See codonfrequencies_from_cds.py to generate frequency files.')
 
-	input_group = parser.add_argument_group('Input')
+	parser.add_argument("--stats", help="Create harmonized codons statistics files", metavar="")
+
+	input_group = parser.add_argument_group('Required arguments')
 	input_group.add_argument("-f","--fasta",  dest="fasta_filepath", help="DNA (multi)fasta file", required=True, metavar="FASTA")
 	input_group.add_argument("-s","--source", dest="source",         help="Source Organism eg. Eco_MG1655")
 	input_group.add_argument("-t","--target", dest="targets",        help="Target organism(s) eg. Eco_MG1655. Can be a comma separated list.", required=True, action="append")
-	input_group.add_argument("-o","--output", dest="output_file",    help="Output filename (.zip)", required=True,  metavar="NAME")
+	input_group.add_argument("-o","--output", dest="output_file",    help="Output name", required=True,  metavar="NAME")
 
 	inputs = parser.parse_args()
-
+	inputs.output_file = inputs.output_file.strip(".zip")
+	inputs.output_file = inputs.output_file.replace(".fasta","").replace(".zip","").replace(".fa","").replace(".fna","")
 
 	return inputs
 
@@ -212,10 +215,12 @@ def main(argv):
 		target_gene_freqs[target_name] = get_input_sequence_freq(fastafile,target_freqs[target_name])
 
 
-	output_zip = zipfile.ZipFile(inputs.output_file, "w")
+	output_zip = zipfile.ZipFile(inputs.output_file+".zip", "w")
+	fasta_out_file = open(inputs.output_file+"_harmonized.fasta","w")
 
 	# LOOP THROUGH INPUT SEQUENCES
 	for sequence in source_gene_freqs:
+
 		for target in target_gene_freqs:
 			harm_out_filename = sequence+"_"+source_name+"-"+target+"_harmonized.csv"
 			harm_out_file = open(harm_out_filename,"w")
@@ -269,11 +274,17 @@ def main(argv):
 
 			for AA in AAs:
 				for i,codon in enumerate(source_counts[AA][0]):
-					harm_out_file.write(AA+","+codon+","+str(source_freqs[AA][1][i])+","+str(source_counts[AA][1][i])+","+str(target_freqs[target][AA][1][i])+","+str(target_counts[target][AA][1][i])+"\n")
+					# Fix, Needed for matching codon and frequencies in target.
+					target_codon_pos = [c for c,x in enumerate(target_freqs[target][AA][0]) if x == codon][0]
 
+					harm_out_file.write(AA+","+codon+","+str(source_freqs[AA][1][i])+","+str(source_counts[AA][1][i])+","+AA+","+target_freqs[target][AA][0][target_codon_pos]+","+str(target_freqs[target][AA][1][target_codon_pos])+","+str(target_counts[target][AA][1][target_codon_pos])+"\n")
+
+			fasta_value = ">"+sequence+" codons harmonized [from "+source_name+" for "+target+"]\n"+harmonized_sequence+"\n"
+			fasta_out_file.write(fasta_value)
 
 			harm_out_file.close()
 			output_zip.write(harm_out_filename)
+	fasta_out_file.close()
 	output_zip.close()
 
 if __name__ == "__main__":
