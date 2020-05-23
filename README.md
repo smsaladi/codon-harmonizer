@@ -17,7 +17,7 @@ but ended up a whole-scale rewrite.
 
 Where referenced in academic work, you may cite this repository and may also
 consider referencing [manuscript](doi.org/10.1371/journal.pone.0184355)
-discussing from Nijsse's work.
+discussing Nijsse's work.
 
 ### Installation
 ```bash
@@ -32,7 +32,7 @@ wget -o Gvio.cds.fna https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/011/385/GC
 wget -o Ecol_MG1655.cds.fna https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/005/845/GCF_000005845.2_ASM584v2/GCF_000005845.2_ASM584v2_cds_from_genomic.fna.gz
 
 codonharmonizer Gvio.cds.fna --write_freqs > Gvio.freq.csv
-codonharmonizer Eco_MG1655.cds.fna --write_freqs > Ecol_MG1655.freq.csv
+codonharmonizer Ecol_MG1655.cds.fna --write_freqs > Ecol_MG1655.freq.csv
 ```
 
 Use these reference sets to recode genes of interest

@@ -22,7 +22,7 @@ This code was intended as a fork of Bart Nijsse's `codon harmonizer`
 but ended up a whole-scale rewrite.
 
 Where referenced in academic work, you may cite this repository and may also
-consider referencing manuscript discussing from Nijsse's work
+consider referencing manuscript discussing Nijsse's work
 (doi.org/10.1371/journal.pone.0184355).
 
 
