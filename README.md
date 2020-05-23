@@ -1,47 +1,41 @@
-<b>To use the tool online go to:<b><br />
-http://codonharmonizer.systemsbiology.nl
+Codon harmonizer
+================
 
-<b>Please cite this tool as:</b><br />
-Claassens NJ, Siliakus MF, Nijsse B, Spaans SK, Creutzburg SCA, Schaap PJ, et al. Improving heterologous membrane protein production in Escherichia coli by combining transcriptional tuning and codon usage algorithms. PLoS One. 2017
+A program that attempts to recode a gene by considering the relative usage
+of each codon in it's host and selecting a codon with the nearest relative
+usage in a target organism.
 
-Requirements: Python 3
+In typical codon optimizers, each codon of a gene of interest is converted to
+the "best" codon for a target organism. Yet, wild-type sequences don't always
+use the "best" codon in their host organism. This code adjusts for this by
+selecting the codon of a target organism that most closely approximates the 
+codon's usage in a source organism.
 
+This code was intended as a fork of Bart Nijsse's
+[`codon harmonizer`](https://gitlab.com/wurssb/Codonharmonizer)
+but ended up a whole-scale rewrite.
+
+Where referenced in academic work, you may cite this repository and may also
+consider referencing [manuscript](doi.org/10.1371/journal.pone.0184355)
+discussing from Nijsse's work.
+
+### Installation
+```bash
+pip install git+git://github.com/smsaladi/codonharmonizer.git
 ```
-Harmonize genes for a target organism.
 
-usage:
-codonharm.py -f <(multi)fasta_file> -o <output file> -s <frequency_file> -t <frequency_file>,<frequency_file>, etc..
+### Usage
 
-Harmonize your genes for a target organism. See codonfrequencies_from_cds.py to generate frequency files.
+Count codon usage in source and target organisms
+```bash
+wget -o Gvio.cds.fna https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/011/385/GCF_000011385.1_ASM1138v1/GCF_000011385.1_ASM1138v1_cds_from_genomic.fna.gz
+wget -o Ecol_MG1655.cds.fna https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/005/845/GCF_000005845.2_ASM584v2/GCF_000005845.2_ASM584v2_cds_from_genomic.fna.gz
 
-optional arguments:
-  -h, --help            show this help message and exit
+codonharmonizer Gvio.cds.fna --write_freqs > Gvio.freq.csv
+codonharmonizer Eco_MG1655.cds.fna --write_freqs > Ecol_MG1655.freq.csv
+```
 
-Input:
-  -f FASTA, --fasta FASTA
-                        DNA (multi)fasta file
-  -s SOURCE, --source SOURCE
-                        Source Organism eg. Eco_MG1655
-  -t TARGETS, --target TARGETS
-                        Target organism(s) eg. Eco_MG1655. Can be a comma separated list.
-  -o NAME, --output NAME
-                        Output filename (.zip)
-
-
-usage:
-codonfrequencies_from_cds.py -n <name> -o <filename> <CDS-fasta>
-
-Generate a frequency file from a CDS fasta file used for the codonharmonizer
-
-positional arguments:
-  CDS-FASTA          DNA multi-fasta file of protein coding genes
-
-optional arguments:
-  -h, --help         show this help message and exit
-  -n, --name NAME    Name of the organism
-  -o, --output FILE  output file (.csv)
-  -q, --quiet        Ignore warnings
-  
-  
-  
+Use these reference sets to recode genes of interest
+```bash
+codonharmonizer test/example_gene.fasta --target Ecol_MG1655.freq.csv --source Gvio.freq.csv
 ```
