@@ -39,6 +39,7 @@ import re
 import textwrap
 import itertools
 import json
+import warnings
 
 import pandas as pd
 
@@ -53,10 +54,13 @@ def read_fasta_file(fasta_file):
     for rec in Bio.SeqIO.parse(fasta_file, "fasta"):
         # Check for valid length
         if len(rec.seq) % 3 != 0:
-            raise ValueError("Sequences cannot have incomplete codons")
+            warnings.warn("Dropping sequences with incomplete codons. Check input")
+            continue
+
         # Check for invalid DNA characters
         if len(re_atcg.sub('', str(rec.seq))) > 0:
-            raise ValueError("Some non-ACTG characters found, check input")
+            warnings.warn("Dropping sequences with non-ACTG characters. Check input")
+            continue
         
         yield rec
 
