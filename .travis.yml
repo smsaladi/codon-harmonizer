@@ -11,18 +11,18 @@ install:
   - pip install -v .
 script:
   - pytest -s -v --color=yes
-deploy:
-  - provider: pypi
-    username: "__token__"
-    password:
-      secure: "MKvIvLbzqIdD5m2CXXHuknXsVnKQAIqWcvRag/DT1LiTcgv29DvScyVN0VieYVq2KL8tz/3MClkBmh8X9ktxD5W2yiqpIjgxSDuyjOEmCYp6/eLE6n2ty4rACWY2TdQo9pZUB3Mq5+OlzywghNILFbfEpVwKaqgMiLZJQPRtKHzCFaLbb6FY/ini53CacQ1HklbX5qmmPvu2XMqhDQEjxn4Gr+nCfJbK0XdSqki9eLiKkO4jcTe8v3RNZnlEkCze1tSs8Zt4BYkGBMbs23DOJCSst8eJ1w6CvWu9wolcxuclmZcIpRy8g80Gq4c/A3ulgBW1zsXnjScxTR5ukCgS8IQKWWQwZXV3BDTKmGVt0J6ZgERkAD2EAxFj5/9iDOAO8IfmVrb908PEP0E+3W/CN2ICuIaFXpEdajLpJoPhFkqaF1/9GSBa8YzYQmy/mSWcB62562PjtIRdYRT9C22MTbCHJpEIcYDvVPDi3gyMtYgnXZaOAKqQXeY9a9vIDSd2rxNt0h03+vJOV0rwdz+n7NXt1q9ge8YDOC3jK1YY9o9DZuY1LZwW09C0Mjni5shz1c7pP2zBF3PtkATn9MrWS8AZwy5TR1sUlCUf0rxUmtYWc/CHl30LU2dI0K7UJl6KATcLfNXSQRgXYiM0b0wlfIuSsWGWB9qgkjO0JcBOOKg="
-    on:
-      tags: true
-    distributions: "sdist"
-  - provider: pypi
-    server: https://test.pypi.org/legacy/
-    username: "__token__"
-    password:
-      secure: "QkpRiLni3jFl654r8KAWENuVjYVQHxqr2Qok7Sx0upiaVDzgfW9FrciLUYOxUp7GKv2ymXlvtTBz0ua/HsK2mLARAW9dWe+1MXdVfrsy/PqxT9x7oOUWTOcGuaux+IjaiGxRkTtCExA7mpn51KvbmtA7owNt1F6ElFzk7Oa9PuEES13sIguABSTfORMoPt7R+/MnlrNKxQQdr0IWYTKORkfPmjJOCUDSvw6ojUczuRSf44gt9ozdHdtdweoa02iIGmsaT3YAEA9bCDwXG7IrJ3r7DZbRh8etJiapY7TZUaqRPq67Ord9IdzBcCTB1T0iHr/KhRjB3fAouFjlz8+txo4VvNfRrPuwEeVFuVdl82ELnOEM4p0SZBKq10YmKZ7/p85adVOSeCCylYF7ISA6USgitSy1E3vO0H1JDvIa4RLzWcrNLN4uvF7ohYTlarB2zXV0prerFTggSxai4DilfkD1J0AfwrNM/fwWmfSBglWeeD+pfAYbABOQupf11B0X1PanoxIUE7n4s8Je1r59MR2L2yTUVZnMitKxVYO17qm8yDsZ5FPKdi7ZikqGgSnt++JYGl+jd/nz2ZnSa17RLQo81csawDql4YSa57UaZVRMTD0mCGJA9d4Idkj969j1rHrc1mJ17LWBCqd/bOl12ZdlIKok26i/F3CiBDHPB2k="
-    distributions: "sdist"
+# deploy:
+#   - provider: pypi
+#     username: "__token__"
+#     password:
+#       secure: "MKvIvLbzqIdD5m2CXXHuknXsVnKQAIqWcvRag/DT1LiTcgv29DvScyVN0VieYVq2KL8tz/3MClkBmh8X9ktxD5W2yiqpIjgxSDuyjOEmCYp6/eLE6n2ty4rACWY2TdQo9pZUB3Mq5+OlzywghNILFbfEpVwKaqgMiLZJQPRtKHzCFaLbb6FY/ini53CacQ1HklbX5qmmPvu2XMqhDQEjxn4Gr+nCfJbK0XdSqki9eLiKkO4jcTe8v3RNZnlEkCze1tSs8Zt4BYkGBMbs23DOJCSst8eJ1w6CvWu9wolcxuclmZcIpRy8g80Gq4c/A3ulgBW1zsXnjScxTR5ukCgS8IQKWWQwZXV3BDTKmGVt0J6ZgERkAD2EAxFj5/9iDOAO8IfmVrb908PEP0E+3W/CN2ICuIaFXpEdajLpJoPhFkqaF1/9GSBa8YzYQmy/mSWcB62562PjtIRdYRT9C22MTbCHJpEIcYDvVPDi3gyMtYgnXZaOAKqQXeY9a9vIDSd2rxNt0h03+vJOV0rwdz+n7NXt1q9ge8YDOC3jK1YY9o9DZuY1LZwW09C0Mjni5shz1c7pP2zBF3PtkATn9MrWS8AZwy5TR1sUlCUf0rxUmtYWc/CHl30LU2dI0K7UJl6KATcLfNXSQRgXYiM0b0wlfIuSsWGWB9qgkjO0JcBOOKg="
+#     on:
+#       tags: true
+#     distributions: "sdist"
+#   - provider: pypi
+#     server: https://test.pypi.org/legacy/
+#     username: "__token__"
+#     password:
+#       secure: "cHXU61JNcxTjJYHfjNpJwhHcMItOM9SdWVGOeLfORwB3082lYkRwP7IowpbGLC/pJyf2MhIz7e30qdErL6431wa8po94nKXyFuc0hYDJZG4PiPg24VYWsi+F9XPgqhrqHLj7k3xKpTervw9zuTlKZp/X9FaiS8ky+uHl/ANcTCq6nxTJxIoGAzbA66dWYlXPr8UmMvqzl4+gsd7g2GD/fEL8NcQ+AwHui237V8wFf5yE6qeVGhh8oeFRUGhGHwFh9P8KT0HkjbNRDV1X/3jn29t0Lwxbrb3I+cJ12qnMIfGIIKJfDtGx/hRIPbcMuMX0nCx+LqaM7rivRIuXfoy7szOx6HC1mcjSC6GdM0NusKF8BfmvI4pigFwL7rccXw5eKC3MNyN9ng+SquqRJUPO6Fm2Y29+Fg+7m1j6SHPSkD+JquXMjMAtJrY3GSBLc+x8JIP7TccJ1Gzb4/e8Zx2qc5BtAf/Du1/24oN1NaFYxJR0/Chyux6xwM72wQGhzmIwkg9kHwvb2G4WVktR2avdQhE2XWDaKEOfrFTI0U+rRuH75Pi3h/2khBsHvYdWb5LJwEav864id8XU7YsowsaDiIXSeywhVTDhMt0i2VXrPBYETn/tMo2olWniLUZrriy6S5/jykPssqLZIiazbf5dUAXFfBSZHhh1Sh/4qeAGZjY="
+#     distributions: "sdist"
   
