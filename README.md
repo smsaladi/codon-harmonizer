@@ -1,4 +1,9 @@
-Codon harmonizer
+[![Build Status](https://travis-ci.com/smsaladi/codon-harmonizer.svg?branch=master)](https://travis-ci.com/smsaladi/codon-slim)
+[![PyPI version](https://badge.fury.io/py/codon-harmonizer.svg)](https://badge.fury.io/py/codon-harmonizer)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/codon-harmonizer)
+[![DOI](https://data.caltech.edu/badge/209835343.svg)](https://data.caltech.edu/badge/latestdoi/266429793)
+
+codon harmonizer
 ================
 
 A program that attempts to recode a gene by considering the relative usage
