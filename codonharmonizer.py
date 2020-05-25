@@ -61,7 +61,9 @@ def read_fasta_file(fasta_file):
         if len(re_atcg.sub('', str(rec.seq))) > 0:
             warnings.warn("Dropping sequences with non-ACTG characters. Check input")
             continue
-        
+
+        rec.seq = Seq(str(rec.seq).upper().replace('U', 'T'))
+ 
         yield rec
 
 def format_fasta(name, seq, width=70):
