@@ -47,10 +47,10 @@ import Bio.SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
+re_atcg = re.compile("[ATUCG]", re.IGNORECASE)
+
 def read_fasta_file(fasta_file):
     """Yield each dna sequence as pd.DataFrame of codons/aa"""
-    re_atcg = re.compile("[ATUCG]")
-
     for rec in Bio.SeqIO.parse(fasta_file, "fasta"):
         # Check for valid length
         if len(rec.seq) % 3 != 0:
