@@ -25,7 +25,7 @@ def test_reference():
     df_test = pd.read_csv(output)
     df_test.sort_values('codon', inplace=True)
 
-    df_expected = pd.read_csv(path("Gvio_Freq.csv"))
+    df_expected = pd.read_csv(path("Gvio.freq.csv"))
     df_expected.sort_values('codon', inplace=True)
 
     assert df_test.equals(df_expected)
@@ -33,15 +33,15 @@ def test_reference():
 
 def test_recode():
     output = subprocess.check_output(["codonharmonizer",
-        "--source", path("Gvio_Freq.csv"),
-        "--target", path("Eco_MG1655_Freq.csv"),
-        path("example_gene.faa")
+        "--source", path("Gvio.freq.csv"),
+        "--target", path("Ecol_MG1655.freq.csv"),
+        path("example_gene.fna")
     ])
     output = io.StringIO(output.decode('utf-8'))
     test_recode = Bio.SeqIO.read(output, "fasta")
 
     # Check harmonized sequence
-    expected_recode = Bio.SeqIO.read(path("example_gene.recode.faa"), "fasta")
+    expected_recode = Bio.SeqIO.read(path("example_gene.recode.fna"), "fasta")
     assert expected_recode.seq == test_recode.seq
 
     # Check calculated CHI values
