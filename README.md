@@ -33,8 +33,8 @@ pip install 'git+https://github.com/smsaladi/codon-harmonizer.git#master'
 
 Count codon usage in source and target organisms
 ```bash
-wget -o Gvio.cds.fna https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/011/385/GCF_000011385.1_ASM1138v1/GCF_000011385.1_ASM1138v1_cds_from_genomic.fna.gz
-wget -o Ecol_MG1655.cds.fna https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/005/845/GCF_000005845.2_ASM584v2/GCF_000005845.2_ASM584v2_cds_from_genomic.fna.gz
+wget -O - https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/011/385/GCF_000011385.1_ASM1138v1/GCF_000011385.1_ASM1138v1_cds_from_genomic.fna.gz | gzip -cd > Gvio.cds.fna
+wget -O - https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/005/845/GCF_000005845.2_ASM584v2/GCF_000005845.2_ASM584v2_cds_from_genomic.fna.gz | gzip -cd > Ecol_MG1655.cds.fna
 
 codonharmonizer Gvio.cds.fna --write_freqs > Gvio.freq.csv
 codonharmonizer Ecol_MG1655.cds.fna --write_freqs > Ecol_MG1655.freq.csv
