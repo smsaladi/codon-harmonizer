@@ -26,7 +26,7 @@ discussing Nijsse's work.
 
 ### Installation
 ```bash
-pip install git+git://github.com/smsaladi/codonharmonizer.git
+pip install 'git+https://github.com/smsaladi/codon-harmonizer.git#master'
 ```
 
 ### Usage
