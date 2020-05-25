@@ -44,3 +44,6 @@ Use these reference sets to recode genes of interest
 ```bash
 codonharmonizer test/example_gene.fasta --target Ecol_MG1655.freq.csv --source Gvio.freq.csv
 ```
+
+For additional information on the source and target frequencies for the
+wild-type and recoded sequences, specify `--stats FILENAME.json` switch.

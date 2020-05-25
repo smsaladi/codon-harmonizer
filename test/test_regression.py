@@ -6,7 +6,9 @@ Regression tests for codonharmonizer
 import io
 import os.path
 import subprocess
+import re
 
+import numpy as np
 import pandas as pd
 import Bio.SeqIO
 
@@ -38,6 +40,20 @@ def test_recode():
     output = io.StringIO(output.decode('utf-8'))
     test_recode = Bio.SeqIO.read(output, "fasta")
 
+    # Check harmonized sequence
     expected_recode = Bio.SeqIO.read(path("example_gene.recode.faa"), "fasta")
     assert expected_recode.seq == test_recode.seq
+
+    # Check calculated CHI values
+    expected_initial_chi = 0.2219
+    expected_harmonized_chi = 0.0991
+
+    # last bit of header
+    m = re.search(r'CHI_0:(\d+\.\d+).*CHI:(\d+\.\d+)', test_recode.description)
+    test_initial_chi = float(m.group(1))
+    test_harmonized_chi = float(m.group(2))
+
+    assert np.isclose(expected_initial_chi, test_initial_chi)
+    assert np.isclose(expected_harmonized_chi, test_harmonized_chi)
+
     return

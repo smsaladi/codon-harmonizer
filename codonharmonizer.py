@@ -38,6 +38,7 @@ import argparse
 import re
 import textwrap
 import itertools
+import json
 
 import pandas as pd
 
@@ -101,11 +102,12 @@ def read_reference_freq(freq_file_path):
     df_freq['aa'] = df_freq['aa'].str.upper()
     df_freq['count'] = df_freq['count'].astype(int)
 
+    # 'freq' is called the 'Relative Codon Adaptiveness (RCA) score' by some
     df_freq['freq'] = df_freq.groupby("aa")['count'].transform(lambda x: x/x.max())
     return df_freq
 
 
-def harmonize_gene(seq, df_source_freq, df_target_freq):
+def harmonize_gene(seq, df_source_freq, df_target_freq, stats=False):
     """Harmonizes a DNA sequence given source and target codon frequencies"""
 
     # Convert to dataframe
@@ -128,17 +130,28 @@ def harmonize_gene(seq, df_source_freq, df_target_freq):
     df_seq['recode'] = df_seq['codon'].apply(lambda x: codon_trans[x])
     seq_harmonized = "".join(df_seq['recode'].tolist())
 
+    if stats:
+        df_seq['wt_source'] = df_source_freq.loc[df_seq['codon'], 'freq'].values
+        df_seq['wt_target'] = df_target_freq.loc[df_seq['codon'], 'freq'].values
+        df_seq['recode_target'] = df_target_freq.loc[df_seq['recode'], 'freq'].values
+
     return seq_harmonized, df_seq
 
-def calculate_CHI(freqs, native_freq):
-    """Calculate index score or CHI, Codon Harmonization Index"""
-    nr_codons = len(native_freq)
+
+def calculate_CHI(seq_target, seq_source, df_target_freq, df_source_freq):
+    """Calculate Codon Harmonization Index (CHI)"""
+
+    df_source_freq = df_source_freq.set_index('codon')
+    df_target_freq = df_target_freq.set_index('codon')
+
     diffsum = 0
+    for i in range(0, len(seq_source), 3):
+        codon_target = str(seq_target[i:i+3])
+        codon_source = str(seq_source[i:i+3])
+        diffsum += abs(df_target_freq.loc[codon_target, 'freq'] -
+                       df_source_freq.loc[codon_source, 'freq'])
 
-    for AApos in range(nr_codons):
-        diffsum += abs(freqs[AApos][2] - native_freq[AApos][2])
-
-    return diffsum/nr_codons
+    return diffsum/(len(seq_source)/3)
 
 
 def main():
@@ -170,34 +183,36 @@ def main():
     target_name, _ = os.path.splitext(args.target)
     target_freq = read_reference_freq(args.target)
 
+    if args.stats:
+        stats = []
+    
     # harmonize all sequences provided
     for rec in read_fasta_file(args.fasta):
         header, seq = rec.id, rec.seq
-        seq_harm, df_stats = harmonize_gene(seq, source_freq, target_freq)
-
+        seq_harm, df_stats = harmonize_gene(seq, source_freq, target_freq, args.stats)
         # statistics
-        # CHI = calculate_CHI(harm_gene_freq, source_gene_freq)
-        # non_CHI = calculate_CHI(target_gene_freq, source_gene_freq)
-        name = "{} (src:{}-tgt:{})".format(header, source_name, target_name)
+        initial_CHI = calculate_CHI(seq, seq, target_freq, source_freq)
+        harm_CHI = calculate_CHI(seq_harm, seq, target_freq, source_freq)
+
+        name = "{} (src:{}-tgt:{}) (CHI_0:{}-CHI:{})".format(
+            header, source_name, target_name, initial_CHI, harm_CHI)
         print(format_fasta(name, seq_harm))
         
-        if args.stats is not None:
-            with open(args.stats, "a") as fh:
-                print("# Source Organism:," + source_name, file=fh)
-                print("# Target Organism:," + target_name, file=fh)
-
-                print("# Original CAI in source:", CAI_native, file=fh)
-                print("# Original CAI in target:", CAI_nonNative, file=fh)
-                print("# Harmonized CAI in target:", CAI_harmonized, file=fh)
-
-                print("# Original CHI in source:", CAI_native, file=fh)
-                print("# Original CHI in target:", CAI_nonNative, file=fh)
-                print("# Harmonized CHI in target:", CAI_harmonized, file=fh)
-
-                print("Codon Harmony Index XX :", CHI, file=fh)
-                print("Codon Harmony Index XX :", non_CHI, file=fh)
-                
-                print(pd.DataFrame(df_stats))
+        if args.stats:
+            with open(args.stats, 'a') as fh:
+                json.dump({
+                    'name': header,
+                    'sequences': {
+                        'initial': str(rec.seq),
+                        'harmonized': seq_harm,
+                    },
+                    'CHI': {
+                        'initial': initial_CHI,
+                        'harmonized': harm_CHI,
+                    },
+                    'data': {c:df_stats[c].tolist() for c in df_stats},
+                }, fh)
+    
     return
 
 if __name__ == "__main__":
