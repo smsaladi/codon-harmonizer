@@ -21,7 +21,7 @@ This code was intended as a fork of Bart Nijsse's
 but ended up a whole-scale rewrite.
 
 Where referenced in academic work, you may cite this repository and may also
-consider referencing [manuscript](doi.org/10.1371/journal.pone.0184355)
+consider referencing the [manuscript](doi.org/10.1371/journal.pone.0184355)
 discussing Nijsse's work.
 
 ### Installation
